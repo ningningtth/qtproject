@@ -1,57 +1,27 @@
+//本机之间发送信息和发送图片
 #pragma once
-#include <QFile>
-#include <QFileDialog>
-#include <QHostAddress>
-//#include <QMutex>
 #include <QObject>
-#include <QThread>
+#include <QPixmap>
 #include <QtNetwork/QUdpSocket>
-
-/*class ImageSenderThread : public QThread
+class UDP : public QObject
 {
     Q_OBJECT
 public:
-    ImageSenderThread(QObject *parent = nuuptr);
+    explicit UDP(QObject *parent = nullptr);
+    ~UDP();
 
-public slots:
-    void sendImage(const QString &fileName, const QHostAddress &address.quint16 port);
-
-protected:
-    void run() override;
-
-private:
-    QString fileName;
-    QHostAddress address;
-    quint16 prot;
-};
-*/
-class P2PNetwork : public QObject
-{
-    Q_OBJECT
-public:
-    explicit P2PNetwork(QObject *parent = nullptr);
-    ~P2PNetwork();
-
-    void startNetwork(const QHostAddress &localAddress, quint localPort);
+    void sendMessage(const QString &message);
+    void sendImage(const QByteArray &imageData);
 
 signals:
-    void messageReceived(const QString &sender, const QString &message);
-    void imageRecevied(const QString &sender, const QByteArray &imageData);
+    void messageReceived(const QString &message, const QString &senderip, quint16 senderport);
+    void imageRecevied();
 
 public slots:
-    void sendMessage(const QString &message);
-    void sendImage();
-    //void start(const QHostAddress &localAddress, quint localPort);
-
+    void saveImage(const QPixmap &image, const QString &filePath);
 private slots:
-    void processPendingDatagrams(); //handle data received
+    void processPendingDatagrams();
 
 private:
-    QUdpSocket *udpSocket;
-    QHostAddress localAddress;
-    quint16 localPort;
-    bool running;
-    //  ImageSenderThread *imageSenderThread;
-
-    //void setupConnections();
+    int sockfd;
 };
