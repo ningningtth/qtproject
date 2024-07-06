@@ -26,5 +26,5 @@ private slots:
 
 private:
     int sockfd;
-    void saveImage(const QString &filePath, const QByteArray &imageData);
+    //void saveImage(const QString &filePath, const QByteArray &imageData);
 };

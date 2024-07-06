@@ -54,7 +54,7 @@ UDP::UDP(QObject *parent)
     qDebug() << "UDP socket created and bound";*/
 
     //保存收到的图片
-    connect(this, &UDP::imageRecevied, this, &UDP::imageRecevied);
+    // connect(this, &UDP::imageRecevied, this, &UDP::imageRecevied);
 }
 
 UDP::~UDP()
@@ -133,6 +133,9 @@ void UDP::processPendingDatagrams()
 
         emit imageRecevied(imageData);
         qDebug() << "recevie successfully";
+
+        // saveImage();
+
     } else if (isTextMessage(buffer, bytesRead)) { //如果成功接收文本信息，输出接收到的信息(文本）
         buffer[bytesRead] = '\0'; //确保以'\0'结尾
         QString message = QString::fromUtf8(buffer);
